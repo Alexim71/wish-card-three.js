@@ -1,0 +1,7 @@
+{
+  "name": "three",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
