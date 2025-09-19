@@ -7,7 +7,15 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'three-book',
     pathMatch: 'full',
+  },
+  {
+    path: 'three-page',
+    loadComponent: () => import('./three-page/three-page.page').then( m => m.ThreePagePage)
+  },
+  {
+    path: 'three-book',
+    loadComponent: () => import('./three-book/three-book.page').then( m => m.ThreeBookPage)
   },
 ];

@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Alexim71 Dev</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <!-- message d'aide -->
+  <div class="hint" *ngIf="showHint">
+    👉 Glisse horizontalement pour découvrir ton souhait ! ( droite -----> gauche )  
+  </div>
+
+  <div class="controls">
+    <button ion-button (click)="toggleOpen()">{{ isOpen ? 'Fermer' : 'Ouvrir' }}</button>
+  </div>
+
+  <div #rendererContainer id="rendererContainer"></div>
+</ion-content>

@@ -1,0 +1,15 @@
+:host {
+  ion-content {
+    --background: #000; /* Fond noir pour bien voir la scène */
+  }
+
+  #rendererContainer {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute; /* occupe tout l’écran */
+    top: 0;
+    left: 0;
+    background: red; 
+  }
+}
