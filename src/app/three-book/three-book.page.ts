@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import * as THREE from 'three';
+import confetti from 'canvas-confetti';
 
 @Component({
   selector: 'app-three-book',
@@ -44,6 +45,9 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy {
   private pointerStartX = 0;
   private startAngle = 0;
 
+  private fireworksInterval: any;
+
+
   constructor() {}
 
   ngAfterViewInit() {
@@ -66,6 +70,7 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy {
     window.removeEventListener('pointermove', this.onPointerMove);
     window.removeEventListener('pointerup', this.onPointerUp);
     this.renderer?.dispose();
+    this.stopFireworks();
   }
 
   private initScene() {
@@ -74,7 +79,7 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy {
 
     this.scene = new THREE.Scene();
 
-    this.camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
+    this.camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
     this.camera.position.set(0, -0.9, 3.5);
     this.camera.lookAt(0, 0, 0);
 
@@ -214,6 +219,20 @@ const matCoverBack = tcBack
     if (!animate) {
       this.currentAngle = this.targetAngle;
       this.applyAngle(this.currentAngle);
+        console.log(this.currentAngle)
+
+       if (this.currentAngle != Math.PI*0 ) {
+      this.startFireworks();
+      console.log("hdhdhdhdhdhdhdhdhdhdhdhdh")
+    } 
+
+    if(this.currentAngle == Math.PI/2){
+        this.stopFireworks();
+        console.log("Angle PI/2")
+    }
+
+
+     
     }
   }
 
@@ -273,6 +292,8 @@ const matCoverBack = tcBack
     // snap open/closed depending on currentAngle
     if (this.currentAngle > Math.PI / 4) {
       this.isOpen = true;
+
+     
       this.showHint = false; // cacher aide dès ouverture
       this.setOpenAngle(Math.PI / 2);
     } else {
@@ -362,6 +383,48 @@ private createMaterialFromImageAndText(srcTex: THREE.Texture | null, text: strin
     metalness: 0.05
   });
 }
+
+
+
+
+  private startFireworks() {
+    this.stopFireworks(); // éviter plusieurs intervalles en même temps
+
+    this.fireworksInterval = setInterval(() => {
+      this.launchFireworks();
+    }, 1000); // un tir toutes les 1s
+  }
+
+   private stopFireworks() {
+    if (this.fireworksInterval) {
+      clearInterval(this.fireworksInterval);
+      this.fireworksInterval = null;
+    }
+  }
+  
+   private launchFireworks() {
+    function fire(particleRatio: number, opts: any) {
+      confetti(Object.assign({}, opts, {
+        particleCount: Math.floor(150 * particleRatio)
+      }));
+    }
+
+     // Tir vers la gauche
+    fire(0.25, { spread: 26, startVelocity: 55, angle: 60, origin: { x: 0.2, y: 0.8 } });
+
+    // Tir vers la droite
+    fire(0.2, { spread: 60, angle: 120, origin: { x: 0.8, y: 0.8 } });
+
+    // Tir vers le haut-centre
+    fire(0.35, { spread: 100, decay: 0.91, scalar: 1.2, angle: 90, origin: { x: 0.5, y: 1 } });
+
+    // Tir aléatoire gauche/droite
+    fire(0.1, { spread: 120, startVelocity: 25, angle: Math.random() * 360, origin: { x: Math.random(), y: Math.random() * 0.5 } });
+  }
+
+
+
+  
 
 
   
