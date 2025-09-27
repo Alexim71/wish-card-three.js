@@ -12,7 +12,7 @@ import confetti from 'canvas-confetti';
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
-export class ThreeBookPage implements AfterViewInit, OnDestroy {
+export class ThreeBookPage implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('rendererContainer', { static: true }) rendererContainer!: ElementRef;
 
   private scene!: THREE.Scene;
@@ -33,6 +33,8 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy {
   private BOOK_WIDTH = 2.4;   // unité three.js
   private BOOK_HEIGHT = 1.6;
   private PAGE_THICK = 0.02;
+  emojis = ['🎉', '✨', '🎂', '🎁', '🌟', '💖', '🎶'];
+  backgroundAudio = new Audio('assets/happy-birthday.mp3');
 
   // interaction
   isOpen = false; // fermé au départ
@@ -61,6 +63,46 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy {
     window.addEventListener('pointermove', this.onPointerMove);
     window.addEventListener('pointerup', this.onPointerUp);
   }
+
+  ngOnInit() {
+  this.startFireworkss();
+
+   this.backgroundAudio.loop = true;
+  this.backgroundAudio.volume = 0.4;  // ajustable
+}
+
+
+startFireworkss() {
+  const container = document.getElementById('emoji-container');
+
+  setInterval(() => {
+    // chaque feu d’artifice = 10 emojis
+    for (let i = 0; i < 10; i++) {
+      const span = document.createElement('span');
+      span.classList.add('emoji');
+      span.textContent = this.emojis[Math.floor(Math.random() * this.emojis.length)];
+
+      // direction aléatoire (explosion radiale)
+      const angle = Math.random() * 2 * Math.PI; // 0 - 360°
+      const distance = 100 + Math.random() * 150; // distance en px
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance;
+
+      // injecter le mouvement dans la variable CSS
+      span.style.setProperty('--move', `translate(${x}px, ${y}px)`);
+
+      // durée différente pour chaque emoji
+      const duration = 1.2 + Math.random();
+      span.style.animationDuration = `${duration}s`;
+
+      container?.appendChild(span);
+
+      // supprimer après animation
+      setTimeout(() => span.remove(), duration * 1000);
+    }
+  }, 2000); // 1 explosion toutes les 2s
+}
+
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationId);
@@ -224,11 +266,20 @@ const matCoverBack = tcBack
        if (this.currentAngle != Math.PI*0 ) {
       this.startFireworks();
       console.log("hdhdhdhdhdhdhdhdhdhdhdhdh")
+
+     
+  
+    this.backgroundAudio.currentTime = 0;
+    this.backgroundAudio.play().catch(err => console.warn('Audio play failed', err));
+   
+    
+ 
     } 
 
     if(this.currentAngle == Math.PI/2){
         this.stopFireworks();
         console.log("Angle PI/2")
+        this.backgroundAudio.pause();
     }
 
 
@@ -250,6 +301,7 @@ const matCoverBack = tcBack
     this.isOpen = !this.isOpen;
      this.showHint = false; // cacher aide dès clic
     this.setOpenAngle(this.isOpen ? Math.PI / 2 : 0);
+
   }
 
   private animate = () => {
