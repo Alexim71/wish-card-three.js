@@ -182,8 +182,8 @@ startFireworkss() {
 
 
     // Texte souhaités (personnalise)
-const leftPageText = "Bonne Année !\nQue tous tes rêves se réalisent 🌟";
-const rightPageText = "Avec amour,\nNormil Nitshai";
+const leftPageText = "Bon anniversaire !\nQue tous tes rêves se réalisent 🌟";
+const rightPageText = "Avec amour,\n#AllenFamily";
 
     // Materials fallback
     // const matCoverFront = tcFront ? new THREE.MeshStandardMaterial({ map: tcFront, side: THREE.DoubleSide }) : new THREE.MeshStandardMaterial({ color: 0x8B0000, side: THREE.DoubleSide });
@@ -199,12 +199,12 @@ const matPageRight = this.createMaterialFromImageAndText(tpRight, rightPageText)
     
 
 // Si tu veux aussi ajouter du texte sur la couverture (titre), fais de même
-const coverTitle = "Carte de Vœux 2025";
+const coverTitle = "Carte de Vœux";
 const matCoverFront = tcFront
   ? this.createMaterialFromImageAndText(tcFront, coverTitle)
   : new THREE.MeshStandardMaterial({ color: 0x8B0000, side: THREE.DoubleSide });
 const matCoverBack = tcBack
-  ? this.createMaterialFromImageAndText(tcBack, "De la part de\nNormil Nitshai")
+  ? this.createMaterialFromImageAndText(tcBack, "De la part de\n #AllenFamily")
   : new THREE.MeshStandardMaterial({ color: 0x333333, side: THREE.DoubleSide });
 
 
