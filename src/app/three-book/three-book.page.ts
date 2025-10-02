@@ -130,32 +130,7 @@ startFireworkss() {
     this.stopFireworks();
   }
 
-  // private initScene() {
-  //   const width = this.rendererContainer.nativeElement.clientWidth || window.innerWidth;
-  //   const height = this.rendererContainer.nativeElement.clientHeight || window.innerHeight;
-
-  //   this.scene = new THREE.Scene();
-
-  //   this.camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
-  //   this.camera.position.set(0, -0.9, 3.5);
-  //   this.camera.lookAt(0, 0, 0);
-
-  //   this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  //   this.renderer.setSize(width, height);
-  //   this.renderer.setPixelRatio(window.devicePixelRatio || 1);
-  //   this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
-
-  //   // lights
-  //   const ambient = new THREE.AmbientLight(0xffffff, 0.6);
-  //   this.scene.add(ambient);
-  //   const dir = new THREE.DirectionalLight(0xffffff, 0.8);
-  //   dir.position.set(5, 5, 5);
-  //   this.scene.add(dir);
-
-  //   // group for book centered at origin
-  //   this.spine.position.set(0, 0, 0);
-  //   this.scene.add(this.spine);
-  // }
+ 
 
   private initScene() {
   const width = this.rendererContainer.nativeElement.clientWidth || window.innerWidth;
@@ -183,7 +158,7 @@ loader.load('assets/interfaceSport.jpg', (texture) => {
 });
 
 
-  this.camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
+  this.camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 100);
   this.camera.position.set(0, -0.9, 3.5);
   this.camera.lookAt(0, 0, 0);
 
