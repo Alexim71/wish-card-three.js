@@ -174,7 +174,7 @@ startFireworkss() {
   // Ajouter un plan avec une image derrière la carte
 const loader = new THREE.TextureLoader();
 loader.load('assets/interfaceSport.jpg', (texture) => {
-  const geometry = new THREE.PlaneGeometry(10, 7); // largeur/hauteur du fond
+  const geometry = new THREE.PlaneGeometry(3, 2); // largeur/hauteur du fond
   const material = new THREE.MeshBasicMaterial({ map: texture });
   const backgroundPlane = new THREE.Mesh(geometry, material);
   
