@@ -105,6 +105,80 @@ ion-toolbar {
 
 
 
+:host {
+  display: block;
+  height: 100vh;
+}
+.renderer-container {
+  position: relative;
+  z-index: 1; /* contenu principal au-dessus du fond */
+  height: 100%;
+}
+ion-content {
+  height: 100%;
+  position: relative;
+}
+
+/* Fond des emojis derrière le contenu */
+.emoji-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Styles de base pour les emojis */
+.emoji {
+  position: absolute;
+  font-size: 2.5rem;
+  opacity: 0;
+  animation: floatEmoji 8s linear infinite;
+}
+
+/* Positionnement et délai aléatoire pour chaque emoji */
+.emoji:nth-child(1) { left: 10%; animation-delay: 0s; }
+.emoji:nth-child(2) { left: 30%; animation-delay: 1s; }
+.emoji:nth-child(3) { left: 50%; animation-delay: 2s; }
+.emoji:nth-child(4) { left: 70%; animation-delay: 3s; }
+.emoji:nth-child(5) { left: 20%; animation-delay: 4s; }
+.emoji:nth-child(6) { left: 40%; animation-delay: 5s; }
+.emoji:nth-child(7) { left: 60%; animation-delay: 6s; }
+.emoji:nth-child(8) { left: 80%; animation-delay: 7s; }
+
+/* Animation des emojis : entrée, flottement, sortie */
+@keyframes floatEmoji {
+  0% {
+    transform: translateY(100%) scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(70%) scale(1) rotate(15deg);
+  }
+  40% {
+    transform: translateY(50%) scale(1.1) rotate(-10deg);
+  }
+  60% {
+    transform: translateY(30%) scale(1) rotate(5deg);
+  }
+  80% {
+    transform: translateY(10%) scale(0.9) rotate(-5deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-10%) scale(0.8) rotate(0deg);
+    opacity: 0;
+  }
+}
+
+
+
+
+
+
+
+
 
 
 

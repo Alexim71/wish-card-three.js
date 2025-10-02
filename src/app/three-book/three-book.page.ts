@@ -49,6 +49,8 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy, OnInit {
 
   private fireworksInterval: any;
   private backgroundPlane?: THREE.Mesh; 
+  private textPlane?: THREE.Mesh;
+  
 
 
   constructor() {}
@@ -67,6 +69,35 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy, OnInit {
     });
   }
 
+  // ✅ Ajout du texte en arrière-plan
+  private addAnimatedTextBackground() {
+    // Créer un canvas 2D pour dessiner du texte
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d')!;
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = 'bold 60px Arial';
+    ctx.fillStyle = 'white';
+    ctx.textAlign = 'center';
+    ctx.fillText(
+      "AIDER LES JEUNES C'EST RENFORCER LES BASES DE NOTRE NATION.",
+      canvas.width / 2,
+      150
+    );
+
+    // Transformer le canvas en texture
+    const texture = new THREE.CanvasTexture(canvas);
+    const geometry = new THREE.PlaneGeometry(10, 2.5);
+    const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+    this.textPlane = new THREE.Mesh(geometry, material);
+
+    this.textPlane.position.set(0, 0, -2);
+    this.scene.add(this.textPlane);
+  }
+
   ngAfterViewInit() {
     this.initScene();
     this.loadBookTexturesAndBuild();
@@ -81,6 +112,9 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy, OnInit {
 
   ngOnInit() {
   this.startFireworkss();
+
+  // this.addAnimatedBackground()
+   this.addAnimatedTextBackground();
 
    this.backgroundAudio.loop = true;
   this.backgroundAudio.volume = 0.4;  // ajustable
@@ -366,18 +400,25 @@ const matCoverBack = tcBack
     this.spine.rotation.x = Math.sin(t * 0.6) * 0.01;
 
       // --- Animation du background ---
-  if (this.backgroundPlane) {
-    const time = Date.now() * 0.001;
+  // if (this.backgroundPlane) {
+  //   const time = Date.now() * 0.001;
 
-    // Faire pulser légèrement la taille
-    const scale = 1 + Math.sin(time) * 0.05; // variation entre 0.95 et 1.05
-    this.backgroundPlane.scale.set(scale, scale, 1);
+  //   // Faire pulser légèrement la taille
+  //   const scale = 1 + Math.sin(time) * 0.4; // variation entre 0.95 et 1.05
+  //   this.backgroundPlane.scale.set(scale, scale, 1);
 
-    // Faire varier la transparence
-    (this.backgroundPlane.material as THREE.MeshBasicMaterial).opacity =
-      0.8 + Math.sin(time * 2) * 0.2; // variation entre 0.6 et 1
-    (this.backgroundPlane.material as THREE.MeshBasicMaterial).transparent = true;
-  }
+  //   // Faire varier la transparence
+  //   (this.backgroundPlane.material as THREE.MeshBasicMaterial).opacity =
+  //     0.8 + Math.sin(time * 2) * 0.2; // variation entre 0.6 et 1
+  //   (this.backgroundPlane.material as THREE.MeshBasicMaterial).transparent = true;
+  // }
+
+   if (this.textPlane) {
+      const time = Date.now() * 0.001;
+
+      // Mouvement horizontal (effet swipe)
+      this.textPlane.position.x = Math.sin(time) * 2.5; // gauche-droite
+    }
 
     this.renderer.render(this.scene, this.camera);
   };
