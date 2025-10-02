@@ -48,9 +48,24 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy, OnInit {
   private startAngle = 0;
 
   private fireworksInterval: any;
+  private backgroundPlane?: THREE.Mesh; 
 
 
   constructor() {}
+
+    private addAnimatedBackground() {
+    const loader = new THREE.TextureLoader();
+    loader.load('assets/interfaceSport.jpg', (texture) => {
+      const geometry = new THREE.PlaneGeometry(10, 7);
+      const material = new THREE.MeshBasicMaterial({ map: texture });
+      const backgroundPlane = new THREE.Mesh(geometry, material);
+
+      backgroundPlane.position.set(0, 0, -2);
+      this.scene.add(backgroundPlane);
+
+      this.backgroundPlane = backgroundPlane; // ✅ sauvegarde
+    });
+  }
 
   ngAfterViewInit() {
     this.initScene();
@@ -115,32 +130,81 @@ startFireworkss() {
     this.stopFireworks();
   }
 
+  // private initScene() {
+  //   const width = this.rendererContainer.nativeElement.clientWidth || window.innerWidth;
+  //   const height = this.rendererContainer.nativeElement.clientHeight || window.innerHeight;
+
+  //   this.scene = new THREE.Scene();
+
+  //   this.camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
+  //   this.camera.position.set(0, -0.9, 3.5);
+  //   this.camera.lookAt(0, 0, 0);
+
+  //   this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  //   this.renderer.setSize(width, height);
+  //   this.renderer.setPixelRatio(window.devicePixelRatio || 1);
+  //   this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
+
+  //   // lights
+  //   const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+  //   this.scene.add(ambient);
+  //   const dir = new THREE.DirectionalLight(0xffffff, 0.8);
+  //   dir.position.set(5, 5, 5);
+  //   this.scene.add(dir);
+
+  //   // group for book centered at origin
+  //   this.spine.position.set(0, 0, 0);
+  //   this.scene.add(this.spine);
+  // }
+
   private initScene() {
-    const width = this.rendererContainer.nativeElement.clientWidth || window.innerWidth;
-    const height = this.rendererContainer.nativeElement.clientHeight || window.innerHeight;
+  const width = this.rendererContainer.nativeElement.clientWidth || window.innerWidth;
+  const height = this.rendererContainer.nativeElement.clientHeight || window.innerHeight;
 
-    this.scene = new THREE.Scene();
+ 
 
-    this.camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
-    this.camera.position.set(0, -0.9, 3.5);
-    this.camera.lookAt(0, 0, 0);
+  this.scene = new THREE.Scene();
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    this.renderer.setSize(width, height);
-    this.renderer.setPixelRatio(window.devicePixelRatio || 1);
-    this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
+  // 👉 Charger l’image en arrière-plan
+  // const loader = new THREE.TextureLoader();
+  // loader.load('assets/interfaceSport.jpg', (texture) => {
+  //   this.scene.background = texture;
+  // });
 
-    // lights
-    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
-    this.scene.add(ambient);
-    const dir = new THREE.DirectionalLight(0xffffff, 0.8);
-    dir.position.set(5, 5, 5);
-    this.scene.add(dir);
+  // Ajouter un plan avec une image derrière la carte
+const loader = new THREE.TextureLoader();
+loader.load('assets/interfaceSport.jpg', (texture) => {
+  const geometry = new THREE.PlaneGeometry(10, 7); // largeur/hauteur du fond
+  const material = new THREE.MeshBasicMaterial({ map: texture });
+  const backgroundPlane = new THREE.Mesh(geometry, material);
+  
+  backgroundPlane.position.set(0, 0, -2); // derrière la carte
+  this.scene.add(backgroundPlane);
+});
 
-    // group for book centered at origin
-    this.spine.position.set(0, 0, 0);
-    this.scene.add(this.spine);
-  }
+
+  this.camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
+  this.camera.position.set(0, -0.9, 3.5);
+  this.camera.lookAt(0, 0, 0);
+
+  this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  this.renderer.setSize(width, height);
+  this.renderer.setPixelRatio(window.devicePixelRatio || 1);
+  this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
+
+  // lumières
+  const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+  this.scene.add(ambient);
+
+  const dir = new THREE.DirectionalLight(0xffffff, 0.8);
+  dir.position.set(5, 5, 5);
+  this.scene.add(dir);
+
+  // groupe pour ton livre
+  this.spine.position.set(0, 0, 0);
+  this.scene.add(this.spine);
+}
+
 
   private loadBookTexturesAndBuild() {
     const loader = new THREE.TextureLoader();
@@ -182,8 +246,16 @@ startFireworkss() {
 
 
     // Texte souhaités (personnalise)
-const leftPageText = "Bon anniversaire !\nQue tous tes rêves se réalisent 🌟";
-const rightPageText = "Avec amour,\n#AllenFamily";
+// const leftPageText = "Bon anniversaire !\nQue tous tes rêves se réalisent 🌟";
+// const rightPageText = "Avec amour,\n#AllenFamily";
+
+// Texte souhaités (personnalisé)
+const leftPageText = 
+  "AIDER LES JEUNES \n C'EST RENFORCER LES BASES DE NOTRE NATION.\n La quatrième édition du championnat interscolaire  \n  de Taekwondo de l'Artibonite vient de s'achever. \n Le succès dont il est couronné ne serait pas possible \n sans la contribution des athlètes, des supporteurs \n et des donateurs. \n La FONDATION INTERFACE les en remercie \n et leur exprime sa plus profonde gratitude.";
+
+const rightPageText = 
+  "Encore une fois, \n  l'expérience a mis le sport au centre d'une mobilisation \n  de ressources et de bonnes volontés pour permettre à \n des jeunes  de notre département de s'épanouir et  \n d'affiner leur art. C'est pourquoi votre support a été \n déterminant.Merci.\n Georges Roots Hyppolite.";
+
 
     // Materials fallback
     // const matCoverFront = tcFront ? new THREE.MeshStandardMaterial({ map: tcFront, side: THREE.DoubleSide }) : new THREE.MeshStandardMaterial({ color: 0x8B0000, side: THREE.DoubleSide });
@@ -317,6 +389,20 @@ const matCoverBack = tcBack
     const t = performance.now() * 0.0020;
     this.spine.rotation.y = Math.sin(t) * 0.10;
     this.spine.rotation.x = Math.sin(t * 0.6) * 0.01;
+
+      // --- Animation du background ---
+  if (this.backgroundPlane) {
+    const time = Date.now() * 0.001;
+
+    // Faire pulser légèrement la taille
+    const scale = 1 + Math.sin(time) * 0.05; // variation entre 0.95 et 1.05
+    this.backgroundPlane.scale.set(scale, scale, 1);
+
+    // Faire varier la transparence
+    (this.backgroundPlane.material as THREE.MeshBasicMaterial).opacity =
+      0.8 + Math.sin(time * 2) * 0.2; // variation entre 0.6 et 1
+    (this.backgroundPlane.material as THREE.MeshBasicMaterial).transparent = true;
+  }
 
     this.renderer.render(this.scene, this.camera);
   };
