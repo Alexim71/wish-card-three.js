@@ -119,6 +119,7 @@ ion-content {
   position: relative;
 }
 
+
 /* Fond des emojis derrière le contenu */
 .emoji-background {
   position: absolute;
@@ -172,6 +173,57 @@ ion-content {
   }
 }
 
+
+
+
+
+
+/* Container */
+.tkd-background {
+  position: relative;
+  width: 200px;   /* adapte selon la taille */
+  height: 200px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Silhouettes de base */
+.tkd {
+  position: absolute;
+  width: 120px;
+  opacity: 0;
+  animation: showTKD 5s linear infinite;
+}
+
+.tkd {
+  filter: drop-shadow(0 0 10px gold);
+  transition: transform 0.3s;
+}
+.tkd:hover {
+  transform: scale(1.1);
+}
+
+
+/* Chaque silhouette apparait à la suite */
+.tkd-1 { animation-delay: 0s; }
+.tkd-2 { animation-delay: 1s; }
+.tkd-3 { animation-delay: 2s; }
+.tkd-4 { animation-delay: 3s; }
+.tkd-5 { animation-delay: 4s; }
+.tkd-6 { animation-delay: 5s; }
+.tkd-7 { animation-delay: 7s; }
+.tkd-8 { animation-delay: 8s; }
+.tkd-9 { animation-delay: 9s; }
+.tkd-10 { animation-delay: 10s; }
+
+@keyframes showTKD {
+  0%, 10% { opacity: 0; transform: scale(0.9); }
+  20%, 30% { opacity: 1; transform: scale(1); }
+  40%, 50% { opacity: 0; transform: scale(1.05); }
+  100% { opacity: 0; }
+}
 
 
 
