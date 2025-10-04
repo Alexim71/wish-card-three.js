@@ -1,9 +1,11 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, NgZone ,OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import * as THREE from 'three';
 import confetti from 'canvas-confetti';
+import { interval, Observable, Subject } from 'rxjs';
+import { map, takeUntil, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-three-book',
@@ -33,8 +35,8 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy, OnInit {
   private BOOK_WIDTH = 2.4;   // unité three.js
   private BOOK_HEIGHT = 1.6;
   private PAGE_THICK = 0.02;
-  emojis = ['🎉', '✨', '🎂', '🎁', '🌟', '💖', '🎶'];
-  backgroundAudio = new Audio('assets/happy-birthday.mp3');
+  // emojis = ['🎉', '✨', '🎂', '🎁', '🌟', '💖', '🎶'];
+  backgroundAudio = new Audio('assets/victory-nomination.mp3');
 
   // interaction
   isOpen = false; // fermé au départ
@@ -50,15 +52,20 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy, OnInit {
   private fireworksInterval: any;
   private backgroundPlane?: THREE.Mesh; 
   private textPlane?: THREE.Mesh;
+
+ fullText = '✨ AIDER LES JEUNES C"EST RENFORCER LES BASES DE NOTRE NATION ✨ FONDATION INTERFACE ✨ Georges Roots Hyppolite ✨';
+  typing$: Observable<string> | null = null;
+  private destroy$ = new Subject<void>();
+  typingSpeed = 80; // ms par caractère
   
 
 
-  constructor() {}
+   constructor(private ngZone: NgZone) {}
 
     private addAnimatedBackground() {
     const loader = new THREE.TextureLoader();
-    loader.load('assets/interfaceSport.jpg', (texture) => {
-      const geometry = new THREE.PlaneGeometry(10, 7);
+    loader.load('assets/Compétition.png', (texture) => {
+      const geometry = new THREE.PlaneGeometry(20, 7);
       const material = new THREE.MeshBasicMaterial({ map: texture });
       const backgroundPlane = new THREE.Mesh(geometry, material);
 
@@ -111,46 +118,63 @@ export class ThreeBookPage implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-  this.startFireworkss();
+  // this.startFireworkss();
 
   // this.addAnimatedBackground()
    this.addAnimatedTextBackground();
 
    this.backgroundAudio.loop = true;
   this.backgroundAudio.volume = 0.4;  // ajustable
+  this.startTyping();
 }
 
 
-startFireworkss() {
-  const container = document.getElementById('emoji-container');
+startTyping() {
+    const len = this.fullText.length;
+    // recrée l'observable à chaque appel pour permettre de relancer
+    this.typing$ = interval(this.typingSpeed).pipe(
+      take(len + 1),
+      map(i => this.fullText.slice(0, i)),
+      takeUntil(this.destroy$)
+    );
+  }
 
-  setInterval(() => {
-    // chaque feu d’artifice = 10 emojis
-    for (let i = 0; i < 10; i++) {
-      const span = document.createElement('span');
-      span.classList.add('emoji');
-      span.textContent = this.emojis[Math.floor(Math.random() * this.emojis.length)];
+  stopTyping() {
+    this.destroy$.next(); // stoppe l'observable
+    // recréation possible plus tard
+  }
 
-      // direction aléatoire (explosion radiale)
-      const angle = Math.random() * 2 * Math.PI; // 0 - 360°
-      const distance = 100 + Math.random() * 150; // distance en px
-      const x = Math.cos(angle) * distance;
-      const y = Math.sin(angle) * distance;
 
-      // injecter le mouvement dans la variable CSS
-      span.style.setProperty('--move', `translate(${x}px, ${y}px)`);
+// startFireworkss() {
+//   const container = document.getElementById('emoji-container');
 
-      // durée différente pour chaque emoji
-      const duration = 1.2 + Math.random();
-      span.style.animationDuration = `${duration}s`;
+//   setInterval(() => {
+//     // chaque feu d’artifice = 10 emojis
+//     for (let i = 0; i < 10; i++) {
+//       const span = document.createElement('span');
+//       span.classList.add('emoji');
+//       span.textContent = this.emojis[Math.floor(Math.random() * this.emojis.length)];
 
-      container?.appendChild(span);
+//       // direction aléatoire (explosion radiale)
+//       const angle = Math.random() * 2 * Math.PI; // 0 - 360°
+//       const distance = 100 + Math.random() * 150; // distance en px
+//       const x = Math.cos(angle) * distance;
+//       const y = Math.sin(angle) * distance;
 
-      // supprimer après animation
-      setTimeout(() => span.remove(), duration * 1000);
-    }
-  }, 2000); // 1 explosion toutes les 2s
-}
+//       // injecter le mouvement dans la variable CSS
+//       span.style.setProperty('--move', `translate(${x}px, ${y}px)`);
+
+//       // durée différente pour chaque emoji
+//       const duration = 1.2 + Math.random();
+//       span.style.animationDuration = `${duration}s`;
+
+//       container?.appendChild(span);
+
+//       // supprimer après animation
+//       setTimeout(() => span.remove(), duration * 1000);
+//     }
+//   }, 2000); // 1 explosion toutes les 2s
+// }
 
 
   ngOnDestroy() {
@@ -162,6 +186,9 @@ startFireworkss() {
     window.removeEventListener('pointerup', this.onPointerUp);
     this.renderer?.dispose();
     this.stopFireworks();
+
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
  
@@ -182,7 +209,7 @@ startFireworkss() {
 
   // Ajouter un plan avec une image derrière la carte
 const loader = new THREE.TextureLoader();
-loader.load('assets/interfaceSport.jpg', (texture) => {
+loader.load('assets/Compétition.png', (texture) => {
   const geometry = new THREE.PlaneGeometry(3.5, 2.5); // largeur/hauteur du fond
   const material = new THREE.MeshBasicMaterial({ map: texture });
   const backgroundPlane = new THREE.Mesh(geometry, material);

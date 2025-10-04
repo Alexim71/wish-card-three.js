@@ -180,6 +180,45 @@ ion-content {
 
 
 
+.scroll-container {
+  position: absolute;
+ top: 80px;        /* ajuste si besoin */
+  left: 50%;      /* le texte s’affiche en bas de la carte */
+
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 9999;
+}
+
+.scroll-text {
+  display: inline-block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  padding-left: 100%; /* commence hors écran à droite */
+  animation: scroll-left 15s linear infinite; /* durée ajustable */
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

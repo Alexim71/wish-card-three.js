@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content fullscreen>
-  <div id="emoji-container"></div>
+  <!-- <div id="emoji-container"></div> -->
 
   <!-- Fond emojis animé -->
   <div class="emoji-background">
@@ -18,14 +18,27 @@
     <span class="emoji">🎯</span>
     <span class="emoji">🥇</span>
   </div>
+
   <div class="hint" *ngIf="showHint">
-    👉 Glisse horizontalement pour découvrir ton souhait ! ( droite -----> gauche )  
+    👉 Glisse horizontalement pour découvrir ton souhait ! ( droite -----> gauche )
   </div>
 
   <div class="controls">
     <button ion-button (click)="toggleOpen()">{{ isOpen ? 'Fermer' : 'Ouvrir' }}</button>
   </div>
 
-  <div #rendererContainer id="rendererContainer"></div>
-  
+
+<div class="scroll-container">
+  <div class="scroll-text">
+    🌟 AIDER LES JEUNES C'EST RENFORCER LES BASES DE NOTRE NATION ✨ INTERFACE Sport ✨ Georges Roots Hyppolite 🌟
+  </div>
+</div>
+
+
+<!-- ton container three.js -->
+<div #rendererContainer id="rendererContainer"></div>
+
+
+
+ 
 </ion-content>
